@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+.env
+.env.local
+.npm
+.cache
+
+# Deployment files (keep these in repo)
+# server-setup.sh
+# deploy.sh
+# nginx-config.conf
