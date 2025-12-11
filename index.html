@@ -2260,6 +2260,22 @@
 
     <script src="./src/js/menu-data.js"></script>
     <script src="./src/js/script.js"></script>
+    <script src="./src/js/pdf-download.js"></script>
+    
+    <!-- Service Worker Registration for Caching -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
     
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
