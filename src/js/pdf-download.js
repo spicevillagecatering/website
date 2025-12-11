@@ -426,6 +426,15 @@ async function generateCustomMenuPDF() {
             doc.text(customerInfo.contact, margin + 20, yPos);
             yPos += 6;
             
+            // Email (if provided)
+            if (customerInfo.email) {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Email:', margin, yPos);
+                doc.setFont('helvetica', 'normal');
+                doc.text(customerInfo.email, margin + 20, yPos);
+                yPos += 6;
+            }
+            
             // Total Plates
             doc.setFont('helvetica', 'bold');
             doc.text('Total Plates:', margin, yPos);
@@ -447,11 +456,10 @@ async function generateCustomMenuPDF() {
         doc.text('Custom Menu', margin, yPos);
         yPos += 8;
         
-        // Add event date and time if provided
-        const eventDateInput = document.getElementById('event-date');
-        const eventTimeInput = document.getElementById('event-time');
-        if (eventDateInput && eventDateInput.value) {
-            const eventDate = new Date(eventDateInput.value);
+        // Add event details if provided (check customerInfo exists first)
+        const customerInfo = window._customerInfo;
+        if (customerInfo && customerInfo.eventDate) {
+            const eventDate = new Date(customerInfo.eventDate);
             const formattedDate = eventDate.toLocaleDateString('en-IE', { 
                 weekday: 'long',
                 year: 'numeric', 
@@ -466,16 +474,38 @@ async function generateCustomMenuPDF() {
             doc.text(formattedDate, margin + 30, yPos);
             yPos += 6;
         }
-        if (eventTimeInput && eventTimeInput.value) {
-            const timeValue = eventTimeInput.value;
+        if (customerInfo && customerInfo.eventTime) {
+            const timeValue = customerInfo.eventTime;
             const [hours, minutes] = timeValue.split(':');
-            const formattedTime = `${parseInt(hours)}:${minutes} ${parseInt(hours) >= 12 ? 'PM' : 'AM'}`;
+            const hour24 = parseInt(hours);
+            const hour12 = hour24 > 12 ? hour24 - 12 : (hour24 === 0 ? 12 : hour24);
+            const ampm = hour24 >= 12 ? 'PM' : 'AM';
+            const formattedTime = `${hour12}:${minutes} ${ampm}`;
             doc.setFontSize(11);
             doc.setTextColor(60, 60, 60);
             doc.setFont('helvetica', 'bold');
             doc.text('Event Time:', margin, yPos);
             doc.setFont('helvetica', 'normal');
             doc.text(formattedTime, margin + 30, yPos);
+            yPos += 6;
+        }
+        if (customerInfo && customerInfo.eventVenue) {
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Venue:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            const venueLines = doc.splitTextToSize(customerInfo.eventVenue, pageWidth - 2 * margin - 30);
+            doc.text(venueLines, margin + 30, yPos);
+            yPos += venueLines.length * 5 + 2;
+        }
+        if (customerInfo && customerInfo.eventParticipants) {
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Number of Participants:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(customerInfo.eventParticipants.toString(), margin + 50, yPos);
             yPos += 6;
         }
         
@@ -1327,14 +1357,26 @@ function addDownloadButtons() {
         // Click handler
         downloadBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
+            e.preventDefault();
+            
+            // Check if jsPDF is loaded
+            if (typeof window.jspdf === 'undefined') {
+                alert('PDF library is loading. Please wait a moment and try again.');
+                return;
+            }
+            
             downloadBtn.disabled = true;
+            const originalHTML = downloadBtn.innerHTML;
             downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             
             try {
                 await generateMenuPDF(menuItemName, description, category);
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF. Please try again. Error: ' + (error.message || 'Unknown error'));
             } finally {
                 downloadBtn.disabled = false;
-                downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+                downloadBtn.innerHTML = originalHTML;
             }
         });
 

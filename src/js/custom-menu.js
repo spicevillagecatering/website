@@ -113,27 +113,140 @@ function setupButtons() {
         });
     }
     
-    // Generate PDF
+    // Generate PDF - Show modal instead of direct generation
     const generatePdfBtn = document.getElementById('generate-pdf-btn');
-    if (generatePdfBtn) {
-        generatePdfBtn.addEventListener('click', async () => {
+    const customerModal = document.getElementById('customer-info-modal');
+    const customerForm = document.getElementById('customer-info-form');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const cancelFormBtn = document.getElementById('cancel-form-btn');
+    
+    if (generatePdfBtn && customerModal) {
+        generatePdfBtn.addEventListener('click', () => {
             const selectedCount = getSelectedCount();
             if (selectedCount === 0) {
                 alert('Please select at least one menu item to generate a custom PDF.');
                 return;
             }
             
-            // Check if jsPDF is loaded
-            if (typeof window.jspdf === 'undefined') {
-                alert('PDF library is loading. Please wait a moment and try again.');
+            // Show modal
+            customerModal.classList.remove('hidden');
+            // Reset form
+            if (customerForm) {
+                customerForm.reset();
+            }
+            // Hide error messages
+            document.getElementById('name-error')?.classList.add('hidden');
+            document.getElementById('contact-error')?.classList.add('hidden');
+            document.getElementById('plates-error')?.classList.add('hidden');
+            document.getElementById('participants-error')?.classList.add('hidden');
+        });
+    }
+    
+    // Close modal handlers
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            customerModal?.classList.add('hidden');
+        });
+    }
+    
+    if (cancelFormBtn) {
+        cancelFormBtn.addEventListener('click', () => {
+            customerModal?.classList.add('hidden');
+        });
+    }
+    
+    // Close modal when clicking outside
+    if (customerModal) {
+        customerModal.addEventListener('click', (e) => {
+            if (e.target === customerModal) {
+                customerModal.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Form submission handler
+    if (customerForm) {
+        customerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('customer-name').value.trim();
+            const email = document.getElementById('customer-email').value.trim();
+            const address = document.getElementById('customer-address').value.trim();
+            const contact = document.getElementById('customer-contact').value.trim();
+            const eventDate = document.getElementById('event-date').value;
+            const eventTime = document.getElementById('event-time').value;
+            const eventVenue = document.getElementById('event-venue').value.trim();
+            const eventParticipants = document.getElementById('event-participants').value.trim();
+            const totalPlates = document.getElementById('total-plates').value.trim();
+            
+            // Validation
+            let isValid = true;
+            const nameError = document.getElementById('name-error');
+            const contactError = document.getElementById('contact-error');
+            const platesError = document.getElementById('plates-error');
+            const participantsError = document.getElementById('participants-error');
+            
+            if (!name) {
+                nameError?.classList.remove('hidden');
+                isValid = false;
+            } else {
+                nameError?.classList.add('hidden');
+            }
+            
+            if (!contact) {
+                contactError?.classList.remove('hidden');
+                isValid = false;
+            } else {
+                contactError?.classList.add('hidden');
+            }
+            
+            if (!totalPlates || parseInt(totalPlates) < 1) {
+                platesError?.classList.remove('hidden');
+                isValid = false;
+            } else {
+                platesError?.classList.add('hidden');
+            }
+            
+            if (!eventParticipants || parseInt(eventParticipants) < 1) {
+                participantsError?.classList.remove('hidden');
+                isValid = false;
+            } else {
+                participantsError?.classList.add('hidden');
+            }
+            
+            if (!isValid) {
                 return;
             }
             
-            generatePdfBtn.disabled = true;
-            const originalText = generatePdfBtn.innerHTML;
-            generatePdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating PDF...';
+            // Store customer info for PDF generation
+            window._customerInfo = {
+                name: name,
+                email: email,
+                address: address,
+                contact: contact,
+                eventDate: eventDate,
+                eventTime: eventTime,
+                eventVenue: eventVenue,
+                eventParticipants: parseInt(eventParticipants),
+                totalPlates: parseInt(totalPlates)
+            };
+            
+            // Close modal
+            customerModal.classList.add('hidden');
+            
+            // Disable submit button and show loading
+            const submitBtn = document.getElementById('submit-form-btn');
+            const originalSubmitText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
             
             try {
+                // Check if jsPDF is loaded
+                if (typeof window.jspdf === 'undefined') {
+                    alert('PDF library is loading. Please wait a moment and try again.');
+                    return;
+                }
+                
                 // Try to use the function from pdf-download.js first
                 if (typeof window.generateCustomMenuPDFFromPage === 'function') {
                     await window.generateCustomMenuPDFFromPage();
@@ -143,8 +256,10 @@ function setupButtons() {
                     // Use local fallback implementation
                     await generateCustomMenuPDFLocal();
                 }
+                // Clear customer info after successful generation
+                window._customerInfo = null;
             } catch (error) {
-                console.error('Error generating PDF:', error);
+                console.error('Error generating custom PDF:', error);
                 const errorMessage = error.message || 'Unknown error occurred';
                 if (errorMessage.includes('Maximum call stack') || errorMessage.includes('stack')) {
                     alert('Error generating PDF: Maximum call stack size exceeded. Please try selecting fewer items or refresh the page.');
@@ -153,8 +268,8 @@ function setupButtons() {
                 }
             } finally {
                 window._generatingPDF = false;
-                generatePdfBtn.disabled = false;
-                generatePdfBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalSubmitText;
             }
         });
     }
