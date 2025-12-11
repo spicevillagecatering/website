@@ -1,6 +1,6 @@
 // Service Worker for Caching - Spice Village Catering
-const CACHE_NAME = 'spice-village-v1';
-const RUNTIME_CACHE = 'spice-village-runtime-v1';
+const CACHE_NAME = 'spice-village-v2';
+const RUNTIME_CACHE = 'spice-village-runtime-v2';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -53,7 +53,18 @@ self.addEventListener('activate', (event) => {
                     })
             );
         })
-            .then(() => self.clients.claim())
+            .then(() => {
+                // Force refresh all clients
+                return self.clients.claim();
+            })
+            .then(() => {
+                // Send message to all clients to reload
+                return self.clients.matchAll().then(clients => {
+                    clients.forEach(client => {
+                        client.postMessage({ type: 'SW_UPDATED', action: 'reload' });
+                    });
+                });
+            })
     );
 });
 

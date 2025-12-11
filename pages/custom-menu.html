@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customize Your Menu | Spice Village Catering</title>
+    <meta name="description" content="Create your custom menu by selecting your favorite dishes. Generate a personalized PDF menu for your event.">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/images/logo/logo.jpg">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#C62828',
+                        secondary: '#F59E0B',
+                        accent: '#2E7D32',
+                        dark: '#1A1A1A',
+                        light: '#FAF9F6',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"Lato"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/styles/main.css">
+    
+    <style>
+        .custom-menu-header {
+            background: linear-gradient(135deg, #C62828, #F59E0B);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .selection-counter {
+            display: inline-flex;
+            align-items: center;
+            background: white;
+            color: #2E7D32;
+            border: 2px solid #2E7D32;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+            font-weight: bold;
+            margin-left: 16px;
+        }
+        .selection-counter i {
+            color: #2E7D32;
+            margin-right: 8px;
+        }
+        .selection-counter #selected-count {
+            background: #2E7D32;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin: 0 8px;
+            font-weight: bold;
+        }
+        .menu-item-card.selected {
+            border: 3px solid #F59E0B;
+            background: #FFF9E6;
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+        }
+        .menu-item-card {
+            transition: all 0.3s ease;
+        }
+        .menu-item-card:hover {
+            transform: translateY(-4px);
+        }
+        .menu-item-card.selected:hover {
+            transform: scale(1.05) translateY(-4px);
+        }
+    </style>
+</head>
+<body class="font-body bg-light text-gray-800 antialiased">
+    
+    <!-- Header -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-3">
+                    <img src="/assets/images/logo/logo.jpg" alt="Spice Village Catering" class="h-12 w-auto">
+                    <span class="font-heading text-xl font-bold text-primary">Spice Village Catering</span>
+                </a>
+                <a href="/" class="text-primary hover:text-red-700 font-semibold">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Custom Menu Header -->
+    <div class="custom-menu-header">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl md:text-5xl font-heading font-bold mb-4">Choose Your Custom Menu</h1>
+            <p class="text-lg md:text-xl opacity-90 mb-6">Select your favorite dishes and generate a personalized menu PDF</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center flex-wrap">
+                <button id="select-all-btn" class="px-6 py-3 bg-white text-primary rounded-lg font-bold hover:bg-gray-100 transition duration-300 shadow-lg">
+                    <i class="fas fa-check-square mr-2"></i> Select All
+                </button>
+                <button id="deselect-all-btn" class="px-6 py-3 bg-white text-gray-700 rounded-lg font-bold hover:bg-gray-100 transition duration-300 shadow-lg">
+                    <i class="fas fa-square mr-2"></i> Deselect All
+                </button>
+                <button id="generate-pdf-btn" class="px-8 py-3 bg-secondary text-white rounded-lg font-bold hover:bg-yellow-600 transition duration-300 shadow-lg transform hover:scale-105">
+                    <i class="fas fa-file-pdf mr-2"></i> Generate Custom PDF
+                </button>
+                <div id="selection-counter" class="selection-counter">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span id="selected-count">0</span> items selected
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-6">
+            <!-- Menu Tabs -->
+            <div class="max-w-6xl mx-auto">
+                <div class="menu-tabs scroll-anim mb-8">
+                    <button class="menu-tab active" data-tab="starters">Starters</button>
+                    <button class="menu-tab" data-tab="salads">Salads</button>
+                    <button class="menu-tab" data-tab="kids">For Kids</button>
+                    <button class="menu-tab" data-tab="breads">Breads</button>
+                    <button class="menu-tab" data-tab="main">Main Course</button>
+                    <button class="menu-tab" data-tab="combo">Combo</button>
+                    <button class="menu-tab" data-tab="dessert">Dessert</button>
+                </div>
+
+                <!-- Menu Content -->
+                <div class="menu-content-wrapper">
+                    <!-- Starters Tab -->
+                    <div class="menu-content active" id="starters-content">
+                        <div class="menu-grid">
+                            <div class="menu-item-card" data-item="beef-cutlet">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-drumstick-bite"></i>
+                                </div>
+                                <div class="menu-item-name">Beef Cutlet</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="chicken-65">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-pepper-hot"></i>
+                                </div>
+                                <div class="menu-item-name">Chicken 65</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="chicken-tikka">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="menu-item-name">Chicken Tikka</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="chicken-lollipop">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="menu-item-name">Chicken Lollipop</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="chilly-paneer">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-cheese"></i>
+                                </div>
+                                <div class="menu-item-name">Chilly Paneer</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="gobi-manchurian">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <div class="menu-item-name">Gobi Manchurian</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Salads Tab -->
+                    <div class="menu-content" id="salads-content">
+                        <div class="menu-grid">
+                            <div class="menu-item-card" data-item="fattoush-salad">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div class="menu-item-name">Fattoush Salad</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="greek-salad">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-bowl-food"></i>
+                                </div>
+                                <div class="menu-item-name">Greek Salad</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="fruit-salad">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-apple-alt"></i>
+                                </div>
+                                <div class="menu-item-name">Fruit Salad</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="mixed-veg-salad">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-carrot"></i>
+                                </div>
+                                <div class="menu-item-name">Mixed Veg Salad</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- For Kids Tab -->
+                    <div class="menu-content" id="kids-content">
+                        <div class="menu-grid">
+                            <div class="menu-item-card" data-item="chicken-nuggets">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-cookie-bite"></i>
+                                </div>
+                                <div class="menu-item-name">Chicken Nuggets</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="tuna-sandwich">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-fish"></i>
+                                </div>
+                                <div class="menu-item-name">Tuna Sandwich</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="egg-sandwich">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-egg"></i>
+                                </div>
+                                <div class="menu-item-name">Egg Sandwich</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="cheese-sandwich">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-cheese"></i>
+                                </div>
+                                <div class="menu-item-name">Cheese Sandwich</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="mix-slider-sandwich">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-hamburger"></i>
+                                </div>
+                                <div class="menu-item-name">Mix Slider Sandwich</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Breads Tab -->
+                    <div class="menu-content" id="breads-content">
+                        <div class="menu-grid">
+                            <div class="menu-item-card" data-item="appam">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-bread-slice"></i>
+                                </div>
+                                <div class="menu-item-name">Appam</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="paratha">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="menu-item-name">Paratha</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="idiyappam">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-spaghetti-monster-flying"></i>
+                                </div>
+                                <div class="menu-item-name">Idiyappam</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="naan">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-bread-slice"></i>
+                                </div>
+                                <div class="menu-item-name">Naan</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Course Tab -->
+                    <div class="menu-content" id="main-content">
+                        <div class="menu-grid">
+                            <div class="menu-item-card" data-item="chicken-biryani">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-drumstick-bite"></i>
+                                </div>
+                                <div class="menu-item-name">Chicken Biryani</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="chicken-fried-rice">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-bowl-rice"></i>
+                                </div>
+                                <div class="menu-item-name">Chicken Fried Rice</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="chicken-mandhi">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="menu-item-name">Chicken Mandhi</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="chicken-kansa">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="menu-item-name">Chicken Kansa</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="mutton-biryani">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-drumstick-bite"></i>
+                                </div>
+                                <div class="menu-item-name">Mutton Biryani</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Combo Tab -->
+                    <div class="menu-content" id="combo-content">
+                        <div class="mb-8">
+                            <h4 class="font-heading text-xl font-bold text-secondary mb-6 text-center">Appam With</h4>
+                            <div class="menu-grid">
+                                <div class="menu-item-card" data-item="chicken-stew">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="menu-item-name">Chicken Stew</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                                <div class="menu-item-card" data-item="beef-stew">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="menu-item-name">Beef Stew</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                                <div class="menu-item-card" data-item="mutton-curry">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="menu-item-name">Mutton Curry</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                                <div class="menu-item-card" data-item="pork-stew">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="menu-item-name">Pork Stew</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                                <div class="menu-item-card" data-item="beef-roast">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="menu-item-name">Beef Roast</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-heading text-xl font-bold text-secondary mb-6 text-center">Fried Rice With</h4>
+                            <div class="menu-grid">
+                                <div class="menu-item-card" data-item="chicken-roast">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="menu-item-name">Chicken Roast</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                                <div class="menu-item-card" data-item="pork-roast">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="menu-item-name">Pork Roast</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                                <div class="menu-item-card" data-item="beef-roast-2">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div class="menu-item-name">Beef Roast</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                                <div class="menu-item-card" data-item="chilli-chicken">
+                                    <div class="menu-item-icon">
+                                        <i class="fas fa-pepper-hot"></i>
+                                    </div>
+                                    <div class="menu-item-name">Chilli Chicken</div>
+                                    <input type="checkbox" class="menu-item-checkbox">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dessert Tab -->
+                    <div class="menu-content" id="dessert-content">
+                        <div class="menu-grid">
+                            <div class="menu-item-card" data-item="mango-pudding">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-ice-cream"></i>
+                                </div>
+                                <div class="menu-item-name">Mango Pudding</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="gulab-jamun">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-candy-cane"></i>
+                                </div>
+                                <div class="menu-item-name">Gulab Jamun</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                            <div class="menu-item-card" data-item="payasam-variety">
+                                <div class="menu-item-icon">
+                                    <i class="fas fa-bowl-food"></i>
+                                </div>
+                                <div class="menu-item-name">Variety of Payasam</div>
+                                <input type="checkbox" class="menu-item-checkbox">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="/src/js/menu-items-data.js"></script>
+    <script src="/src/js/menu-data.js"></script>
+    <script src="/src/js/script.js"></script>
+    <script src="/src/js/pdf-download.js"></script>
+    <script src="/src/js/custom-menu.js"></script>
+</body>
+</html>
+
