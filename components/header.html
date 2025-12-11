@@ -1,0 +1,70 @@
+<!-- Navigation -->
+<nav class="sticky top-0 w-full z-40 transition-all duration-300 bg-white/95 backdrop-blur-md shadow-md py-4">
+    <div class="container mx-auto px-6 flex justify-between items-center">
+        <a href="/" class="flex items-center">
+            <div class="flex items-center gap-3">
+                <img src="/assets/images/logo/logo.jpg"
+                     alt="Spice Village Catering Logo"
+                     class="h-16 w-auto object-contain"
+                     onerror="this.onerror=null; this.src='/assets/images/logo/logo.jpg'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='flex';};">
+                <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center" style="display: none;">
+                    <i class="fas fa-utensils text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-heading text-2xl font-bold text-primary">Spice Village</h1>
+                    <p class="text-xs text-gray-600 uppercase tracking-wider">Catering</p>
+                </div>
+            </div>
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden text-gray-800 hover:text-primary focus:outline-none">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
+
+        <!-- Desktop Menu -->
+        <ul class="hidden md:flex items-center space-x-8">
+            <li><a href="/" class="font-bold text-sm uppercase tracking-wider hover:text-primary transition duration-300">Home</a></li>
+            <li><a href="/pages/about.html" class="font-bold text-sm uppercase tracking-wider hover:text-primary transition duration-300">About</a></li>
+            <li><a href="/pages/menu.html" class="font-bold text-sm uppercase tracking-wider hover:text-primary transition duration-300">Menu</a></li>
+            <li><a href="/pages/services.html" class="font-bold text-sm uppercase tracking-wider hover:text-primary transition duration-300">Services</a></li>
+            <li><a href="/pages/blog.html" class="font-bold text-sm uppercase tracking-wider hover:text-primary transition duration-300">Blog</a></li>
+            <li><a href="/pages/gallery.html" class="font-bold text-sm uppercase tracking-wider hover:text-primary transition duration-300">Gallery</a></li>
+            <li><a href="/pages/kitchen.html" class="font-bold text-sm uppercase tracking-wider hover:text-primary transition duration-300">Kitchen</a></li>
+            <li><a href="/pages/contact.html" class="btn-secondary">Book Now</a></li>
+        </ul>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-lg py-4 border-t border-gray-100">
+        <div class="flex flex-col items-center space-y-4 px-4">
+            <div class="flex flex-col items-center text-sm text-gray-600 space-y-2 mb-4 w-full border-b pb-4">
+                <a href="https://wa.me/353858189052?text=Hello!%20I%20would%20like%20to%20inquire%20about%20your%20catering%20services."
+                    target="_blank" class="flex items-center gap-2">
+                    <i class="fab fa-whatsapp text-[#25D366]"></i> 085 818 9052
+                </a>
+                <a href="tel:014130573" class="flex items-center gap-2">
+                    <i class="fas fa-phone-alt text-secondary"></i> 01 413 0573
+                </a>
+                <a href="mailto:info@spicevillagecatering.ie" class="flex items-center gap-2">
+                    <i class="fas fa-envelope text-secondary"></i> info@spicevillagecatering.ie
+                </a>
+                <a href="https://www.instagram.com/spicevillage_catering" target="_blank" class="flex items-center gap-2">
+                    <i class="fab fa-instagram text-secondary"></i> Instagram
+                </a>
+                <a href="https://www.facebook.com/spicevillagelucan" target="_blank" class="flex items-center gap-2">
+                    <i class="fab fa-facebook text-secondary"></i> Facebook
+                </a>
+            </div>
+            <a href="/" class="mobile-link font-bold text-lg hover:text-primary">Home</a>
+            <a href="/pages/about.html" class="mobile-link font-bold text-lg hover:text-primary">About</a>
+            <a href="/pages/menu.html" class="mobile-link font-bold text-lg hover:text-primary">Menu</a>
+            <a href="/pages/services.html" class="mobile-link font-bold text-lg hover:text-primary">Services</a>
+            <a href="/pages/blog.html" class="mobile-link font-bold text-lg hover:text-primary">Blog</a>
+            <a href="/pages/gallery.html" class="mobile-link font-bold text-lg hover:text-primary">Gallery</a>
+            <a href="/pages/kitchen.html" class="mobile-link font-bold text-lg hover:text-primary">Kitchen</a>
+            <a href="/pages/contact.html" class="mobile-link btn-secondary w-full text-center">Book Now</a>
+        </div>
+    </div>
+</nav>
+

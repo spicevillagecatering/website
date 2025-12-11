@@ -1,0 +1,39 @@
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/353858189052?text=Hello!%20I%20would%20like%20to%20inquire%20about%20your%20catering%20services."
+    target="_blank"
+    class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:bg-[#20BA5A] transition-all duration-300 transform hover:scale-110"
+    aria-label="Contact us on WhatsApp">
+    <i class="fab fa-whatsapp text-3xl"></i>
+</a>
+
+<!-- AI Chatbot Button (Placeholder for future implementation) -->
+<div id="chatbot-container">
+    <button id="chatbot-toggle" class="bg-primary text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:bg-red-800 transition-all duration-300 transform hover:scale-110 mb-4">
+        <i class="fas fa-robot text-2xl"></i>
+    </button>
+    <div id="chatbot-window" class="bg-white rounded-lg shadow-2xl">
+        <div class="chatbot-header">
+            <div>
+                <h3 class="font-bold">Spice Village Assistant</h3>
+                <p class="text-xs opacity-90">AI Chatbot (Coming Soon)</p>
+            </div>
+            <button id="chatbot-close" class="text-white hover:text-gray-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages">
+            <div class="text-center text-gray-500 py-8">
+                <i class="fas fa-robot text-4xl mb-4 opacity-50"></i>
+                <p>AI Chatbot feature will be available soon!</p>
+                <p class="text-sm mt-2">For now, please contact us via WhatsApp</p>
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" class="chatbot-input" placeholder="Type your message...">
+            <button id="chatbot-send" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-red-800 transition">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
