@@ -456,8 +456,7 @@ async function generateCustomMenuPDF() {
         doc.text('Custom Menu', margin, yPos);
         yPos += 8;
         
-        // Add event details if provided (check customerInfo exists first)
-        const customerInfo = window._customerInfo;
+        // Add event details if provided (customerInfo already declared above)
         if (customerInfo && customerInfo.eventDate) {
             const eventDate = new Date(customerInfo.eventDate);
             const formattedDate = eventDate.toLocaleDateString('en-IE', { 
