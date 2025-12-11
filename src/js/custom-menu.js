@@ -393,9 +393,21 @@ window.getSelectedMenuItemsFromPage = function() {
                                 if (nameEl) {
                                     const itemName = nameEl.textContent.trim();
                                     const itemKey = card.getAttribute('data-item') || itemName.toLowerCase().replace(/\s+/g, '-');
+                                    let description = 'Delicious and authentic preparation';
+                                    try {
+                                        if (typeof window !== 'undefined' && typeof window.getMenuDescription === 'function') {
+                                            description = window.getMenuDescription(itemKey) || description;
+                                        }
+                                    } catch (e) {
+                                        console.warn('Error getting description for', itemKey, ':', e);
+                                    }
+                                    // Get quantity
+                                    const quantityInput = card.querySelector('.menu-item-quantity');
+                                    const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
                                     comboItems[categoryKey].push({
                                         name: itemName,
-                                        description: typeof getMenuDescription !== 'undefined' ? getMenuDescription(itemKey) : 'Delicious and authentic preparation'
+                                        description: description,
+                                        quantity: quantity
                                     });
                                 }
                             }
@@ -419,9 +431,21 @@ window.getSelectedMenuItemsFromPage = function() {
                     if (nameEl) {
                         const itemName = nameEl.textContent.trim();
                         const itemKey = card.getAttribute('data-item') || itemName.toLowerCase().replace(/\s+/g, '-');
+                        let description = 'Delicious and authentic preparation';
+                        try {
+                            if (typeof window !== 'undefined' && typeof window.getMenuDescription === 'function') {
+                                description = window.getMenuDescription(itemKey) || description;
+                            }
+                        } catch (e) {
+                            console.warn('Error getting description for', itemKey, ':', e);
+                        }
+                        // Get quantity
+                        const quantityInput = card.querySelector('.menu-item-quantity');
+                        const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
                         items.push({
                             name: itemName,
-                            description: typeof getMenuDescription !== 'undefined' ? getMenuDescription(itemKey) : 'Delicious and authentic preparation'
+                            description: description,
+                            quantity: quantity
                         });
                     }
                 }

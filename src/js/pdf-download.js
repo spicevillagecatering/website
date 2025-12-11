@@ -43,9 +43,17 @@ function getAllMenuItems() {
                         nextElement.querySelectorAll('.menu-item-name').forEach(nameEl => {
                             const itemName = nameEl.textContent.trim();
                             const itemKey = itemName.toLowerCase().replace(/\s+/g, '-');
+                            let description = 'Delicious and authentic preparation';
+                            try {
+                                if (typeof window !== 'undefined' && typeof window.getMenuDescription === 'function') {
+                                    description = window.getMenuDescription(itemKey) || description;
+                                }
+                            } catch (e) {
+                                console.warn('Error getting description for', itemKey, ':', e);
+                            }
                             comboItems[categoryKey].push({
                                 name: itemName,
-                                description: typeof getMenuDescription !== 'undefined' ? getMenuDescription(itemKey) : 'Delicious and authentic preparation'
+                                description: description
                             });
                         });
                     }
@@ -63,9 +71,17 @@ function getAllMenuItems() {
             content.querySelectorAll('.menu-item-name').forEach(nameEl => {
                 const itemName = nameEl.textContent.trim();
                 const itemKey = itemName.toLowerCase().replace(/\s+/g, '-');
+                let description = 'Delicious and authentic preparation';
+                try {
+                    if (typeof window !== 'undefined' && typeof window.getMenuDescription === 'function') {
+                        description = window.getMenuDescription(itemKey) || description;
+                    }
+                } catch (e) {
+                    console.warn('Error getting description for', itemKey, ':', e);
+                }
                 items.push({
                     name: itemName,
-                    description: typeof getMenuDescription !== 'undefined' ? getMenuDescription(itemKey) : 'Delicious and authentic preparation'
+                    description: description
                 });
             });
             
@@ -207,9 +223,21 @@ function getSelectedMenuItemsFromMainPage() {
                                 if (nameEl) {
                                     const itemName = nameEl.textContent.trim();
                                     const itemKey = itemName.toLowerCase().replace(/\s+/g, '-');
+                                    let description = 'Delicious and authentic preparation';
+                                    try {
+                                        if (typeof window !== 'undefined' && typeof window.getMenuDescription === 'function') {
+                                            description = window.getMenuDescription(itemKey) || description;
+                                        }
+                                    } catch (e) {
+                                        console.warn('Error getting description for', itemKey, ':', e);
+                                    }
+                                    // Get quantity
+                                    const quantityInput = card.querySelector('.menu-item-quantity');
+                                    const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
                                     comboItems[categoryKey].push({
                                         name: itemName,
-                                        description: typeof getMenuDescription !== 'undefined' ? getMenuDescription(itemKey) : 'Delicious and authentic preparation'
+                                        description: description,
+                                        quantity: quantity
                                     });
                                 }
                             }
@@ -233,9 +261,21 @@ function getSelectedMenuItemsFromMainPage() {
                     if (nameEl) {
                         const itemName = nameEl.textContent.trim();
                         const itemKey = itemName.toLowerCase().replace(/\s+/g, '-');
+                        let description = 'Delicious and authentic preparation';
+                        try {
+                            if (typeof window !== 'undefined' && typeof window.getMenuDescription === 'function') {
+                                description = window.getMenuDescription(itemKey) || description;
+                            }
+                        } catch (e) {
+                            console.warn('Error getting description for', itemKey, ':', e);
+                        }
+                        // Get quantity
+                        const quantityInput = card.querySelector('.menu-item-quantity');
+                        const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
                         items.push({
                             name: itemName,
-                            description: typeof getMenuDescription !== 'undefined' ? getMenuDescription(itemKey) : 'Delicious and authentic preparation'
+                            description: description,
+                            quantity: quantity
                         });
                     }
                 }
@@ -350,6 +390,56 @@ async function generateCustomMenuPDF() {
         doc.line(margin, yPos, pageWidth - margin, yPos);
         yPos += 10;
 
+        // Add customer information if available
+        const customerInfo = window._customerInfo;
+        if (customerInfo) {
+            doc.setFontSize(12);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Customer Information', margin, yPos);
+            yPos += 8;
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            // Name
+            doc.setFont('helvetica', 'bold');
+            doc.text('Name:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(customerInfo.name, margin + 20, yPos);
+            yPos += 6;
+            
+            // Address (if provided)
+            if (customerInfo.address) {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Address:', margin, yPos);
+                doc.setFont('helvetica', 'normal');
+                const addressLines = doc.splitTextToSize(customerInfo.address, pageWidth - 2 * margin - 20);
+                doc.text(addressLines, margin + 20, yPos);
+                yPos += addressLines.length * 5 + 2;
+            }
+            
+            // Contact Number
+            doc.setFont('helvetica', 'bold');
+            doc.text('Contact:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(customerInfo.contact, margin + 20, yPos);
+            yPos += 6;
+            
+            // Total Plates
+            doc.setFont('helvetica', 'bold');
+            doc.text('Total Plates:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(customerInfo.totalPlates.toString(), margin + 20, yPos);
+            yPos += 8;
+            
+            // Add separator after customer info
+            doc.setDrawColor(200, 200, 200);
+            doc.setLineWidth(0.3);
+            doc.line(margin, yPos, pageWidth - margin, yPos);
+            yPos += 8;
+        }
+
         // Add custom menu title
         doc.setFontSize(18);
         doc.setTextColor(198, 40, 40);
@@ -357,11 +447,45 @@ async function generateCustomMenuPDF() {
         doc.text('Custom Menu', margin, yPos);
         yPos += 8;
         
+        // Add event date and time if provided
+        const eventDateInput = document.getElementById('event-date');
+        const eventTimeInput = document.getElementById('event-time');
+        if (eventDateInput && eventDateInput.value) {
+            const eventDate = new Date(eventDateInput.value);
+            const formattedDate = eventDate.toLocaleDateString('en-IE', { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Event Date:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(formattedDate, margin + 30, yPos);
+            yPos += 6;
+        }
+        if (eventTimeInput && eventTimeInput.value) {
+            const timeValue = eventTimeInput.value;
+            const [hours, minutes] = timeValue.split(':');
+            const formattedTime = `${parseInt(hours)}:${minutes} ${parseInt(hours) >= 12 ? 'PM' : 'AM'}`;
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Event Time:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(formattedTime, margin + 30, yPos);
+            yPos += 6;
+        }
+        
         // Add selected count
         doc.setFontSize(10);
         doc.setTextColor(100, 100, 100);
         doc.setFont('helvetica', 'italic');
-        doc.text(`(${totalSelected} items selected)`, margin + 40, yPos);
+        const totalQuantity = Object.values(selectedItems).reduce((sum, items) => 
+            sum + items.reduce((itemSum, item) => itemSum + (item.quantity || 1), 0), 0);
+        doc.text(`(${totalSelected} items, ${totalQuantity} total plates)`, margin + 40, yPos);
         yPos += 12;
 
         // Get category order
@@ -394,11 +518,13 @@ async function generateCustomMenuPDF() {
                     yPos = margin;
                 }
 
-                // Item name
+                // Item name with quantity
                 doc.setFontSize(11);
                 doc.setTextColor(60, 60, 60);
                 doc.setFont('helvetica', 'bold');
-                doc.text(`• ${item.name}`, margin + 5, yPos);
+                const quantity = item.quantity || 1;
+                const itemText = quantity > 1 ? `• ${item.name} (${quantity} plates)` : `• ${item.name}`;
+                doc.text(itemText, margin + 5, yPos);
                 yPos += 6;
 
                 // Item description
@@ -429,19 +555,49 @@ async function generateCustomMenuPDF() {
         doc.line(margin, yPos, pageWidth - margin, yPos);
         yPos += 10;
 
+        // Add contact information section header
+        doc.setFontSize(12);
+        doc.setTextColor(198, 40, 40);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Contact Information', margin, yPos);
+        yPos += 8;
+        
         // Add contact information
         doc.setFontSize(10);
-        doc.setTextColor(100, 100, 100);
+        doc.setTextColor(60, 60, 60);
         doc.setFont('helvetica', 'normal');
         doc.text('For orders and inquiries:', margin, yPos);
         yPos += 6;
-        doc.text('Phone: 085 818 9052 | 01 413 0573', margin, yPos);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(198, 40, 40);
+        doc.text('Phone:', margin, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(60, 60, 60);
+        doc.text('085 818 9052 | 01 413 0573', margin + 18, yPos);
         yPos += 6;
-        doc.text('Email: info@spicevillagecatering.ie', margin, yPos);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(198, 40, 40);
+        doc.text('Email:', margin, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(60, 60, 60);
+        doc.text('info@spicevillagecatering.ie', margin + 18, yPos);
         yPos += 6;
-        doc.text('Website: www.spicevillagecatering.ie', margin, yPos);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(198, 40, 40);
+        doc.text('Website:', margin, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(60, 60, 60);
+        doc.text('www.spicevillagecatering.ie', margin + 18, yPos);
         yPos += 6;
-        doc.text('Address: C4 Station Road Business Park, Crag Avenue, Clondalkin, Dublin 22, D22DX52', margin, yPos);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(198, 40, 40);
+        doc.text('Address:', margin, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(60, 60, 60);
+        const addressText = 'C4 Station Road Business Park, Crag Avenue, Clondalkin, Dublin 22, D22DX52';
+        const addressLines = doc.splitTextToSize(addressText, pageWidth - 2 * margin - 18);
+        doc.text(addressLines, margin + 18, yPos);
+        yPos += addressLines.length * 5 + 2;
 
         // Add footer on last page
         const pageCount = doc.internal.getNumberOfPages();
@@ -859,30 +1015,115 @@ function addCheckboxesToMenuItems() {
     
     menuItemCards.forEach((card) => {
         // Check if checkbox already exists
-        if (card.querySelector('.menu-item-checkbox')) {
-            return;
+        let checkbox = card.querySelector('.menu-item-checkbox');
+        let quantityContainer = card.querySelector('.menu-item-quantity-container');
+        
+        // Create checkbox if it doesn't exist
+        if (!checkbox) {
+            checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'menu-item-checkbox';
+            checkbox.style.cssText = `
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+                z-index: 20;
+                accent-color: #C62828;
+                display: none;
+                background: white;
+                border-radius: 4px;
+            `;
+            card.appendChild(checkbox);
         }
+        
+        // Create quantity input container if it doesn't exist
+        if (!quantityContainer) {
+            quantityContainer = document.createElement('div');
+            quantityContainer.className = 'menu-item-quantity-container';
+            quantityContainer.style.cssText = `
+                position: absolute;
+                top: 40px;
+                left: 10px;
+                display: none;
+                align-items: center;
+                gap: 5px;
+                z-index: 20;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 4px 8px;
+                border-radius: 6px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            `;
 
-        // Create checkbox
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'menu-item-checkbox';
-        checkbox.style.cssText = `
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            z-index: 20;
-            accent-color: #C62828;
-            display: none;
-            background: white;
-            border-radius: 4px;
-        `;
+            // Create quantity label
+            const quantityLabel = document.createElement('label');
+            quantityLabel.textContent = 'Qty:';
+            quantityLabel.style.cssText = `
+                font-size: 11px;
+                font-weight: 600;
+                color: #333;
+                margin: 0;
+            `;
 
-        // Add checkbox to card
-        card.appendChild(checkbox);
+            // Create quantity input
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.className = 'menu-item-quantity';
+            quantityInput.min = '1';
+            quantityInput.max = '999';
+            quantityInput.value = '1';
+            quantityInput.style.cssText = `
+                width: 50px;
+                height: 24px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 2px 6px;
+                font-size: 12px;
+                text-align: center;
+                font-weight: 600;
+            `;
+            
+            // Prevent clicks from propagating to parent elements
+            quantityInput.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            quantityInput.addEventListener('mousedown', function(e) {
+                e.stopPropagation();
+            });
+            quantityInput.addEventListener('focus', function(e) {
+                e.stopPropagation();
+            });
+
+            quantityContainer.appendChild(quantityLabel);
+            quantityContainer.appendChild(quantityInput);
+            
+            // Prevent clicks on container from propagating
+            quantityContainer.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            card.appendChild(quantityContainer);
+        }
+        
+        // Add/update event listener to show/hide quantity based on checkbox
+        // Remove existing listeners by cloning the checkbox
+        const newCheckbox = checkbox.cloneNode(true);
+        checkbox.parentNode.replaceChild(newCheckbox, checkbox);
+        checkbox = newCheckbox;
+        
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                quantityContainer.style.display = 'flex';
+            } else {
+                quantityContainer.style.display = 'none';
+                const quantityInput = quantityContainer.querySelector('.menu-item-quantity');
+                if (quantityInput) {
+                    quantityInput.value = '1';
+                }
+            }
+        });
         
         // Make card position relative if not already
         if (getComputedStyle(card).position === 'static') {
@@ -907,9 +1148,18 @@ function toggleCustomizeMode() {
         toggleBtn.classList.remove('bg-gray-200', 'text-gray-700');
         toggleBtn.classList.add('bg-primary', 'text-white', 'hover:bg-red-700');
         
-        // Show checkboxes
+        // Show checkboxes and quantity inputs
         checkboxes.forEach(checkbox => {
             checkbox.style.display = 'block';
+        });
+        
+        // Show quantity inputs for checked items
+        const quantityContainers = document.querySelectorAll('.menu-item-quantity-container');
+        quantityContainers.forEach(container => {
+            const checkbox = container.parentElement.querySelector('.menu-item-checkbox');
+            if (checkbox && checkbox.checked) {
+                container.style.display = 'flex';
+            }
         });
         
         // Add visual indicator to cards
@@ -925,9 +1175,14 @@ function toggleCustomizeMode() {
         toggleBtn.classList.remove('bg-primary', 'text-white', 'hover:bg-red-700');
         toggleBtn.classList.add('bg-gray-200', 'text-gray-700');
         
-        // Hide checkboxes
+        // Hide checkboxes and quantity inputs
         checkboxes.forEach(checkbox => {
             checkbox.style.display = 'none';
+        });
+        
+        const quantityContainers = document.querySelectorAll('.menu-item-quantity-container');
+        quantityContainers.forEach(container => {
+            container.style.display = 'none';
         });
         
         // Remove visual indicator from cards
@@ -944,6 +1199,11 @@ function selectAllMenuItems() {
     const checkboxes = document.querySelectorAll('.menu-item-checkbox');
     checkboxes.forEach(checkbox => {
         checkbox.checked = true;
+        // Show quantity input for checked items
+        const quantityContainer = checkbox.parentElement.querySelector('.menu-item-quantity-container');
+        if (quantityContainer) {
+            quantityContainer.style.display = 'flex';
+        }
     });
     updateSelectedCount();
 }
@@ -955,6 +1215,15 @@ function deselectAllMenuItems() {
     const checkboxes = document.querySelectorAll('.menu-item-checkbox');
     checkboxes.forEach(checkbox => {
         checkbox.checked = false;
+        // Hide quantity input for unchecked items
+        const quantityContainer = checkbox.parentElement.querySelector('.menu-item-quantity-container');
+        if (quantityContainer) {
+            quantityContainer.style.display = 'none';
+            const quantityInput = quantityContainer.querySelector('.menu-item-quantity');
+            if (quantityInput) {
+                quantityInput.value = '1';
+            }
+        }
     });
     updateSelectedCount();
 }
@@ -970,6 +1239,18 @@ function updateSelectedCount() {
     if (selectedCountEl) {
         selectedCountEl.textContent = `${checkedCount} item${checkedCount !== 1 ? 's' : ''} selected`;
     }
+    
+    // Ensure quantity inputs are shown/hidden based on checkbox state
+    checkboxes.forEach(checkbox => {
+        const quantityContainer = checkbox.parentElement.querySelector('.menu-item-quantity-container');
+        if (quantityContainer) {
+            if (checkbox.checked) {
+                quantityContainer.style.display = 'flex';
+            } else {
+                quantityContainer.style.display = 'none';
+            }
+        }
+    });
 }
 
 /**
@@ -988,9 +1269,14 @@ function addDownloadButtons() {
         
         // Get description from menu-data.js if available
         const itemKey = menuItemName.toLowerCase().replace(/\s+/g, '-');
-        const description = typeof getMenuDescription !== 'undefined' 
-            ? getMenuDescription(itemKey) 
-            : 'Delicious and authentic preparation';
+        let description = 'Delicious and authentic preparation';
+        try {
+            if (typeof window !== 'undefined' && typeof window.getMenuDescription === 'function') {
+                description = window.getMenuDescription(itemKey) || description;
+            }
+        } catch (e) {
+            console.warn('Error getting description for', itemKey, ':', e);
+        }
 
         // Get category from parent tab
         let category = '';
@@ -1117,22 +1403,125 @@ function initializeCustomizeMenu() {
         deselectAllBtn.addEventListener('click', deselectAllMenuItems);
     }
     
-    // Generate custom PDF button
+    // Generate custom PDF button - show modal instead of direct generation
     const generateCustomBtn = document.getElementById('generate-custom-pdf-btn');
-    if (generateCustomBtn) {
-        generateCustomBtn.addEventListener('click', async () => {
-            generateCustomBtn.disabled = true;
-            const originalText = generateCustomBtn.innerHTML;
-            generateCustomBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
+    const customerModal = document.getElementById('customer-info-modal');
+    const customerForm = document.getElementById('customer-info-form');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const cancelFormBtn = document.getElementById('cancel-form-btn');
+    
+    if (generateCustomBtn && customerModal) {
+        generateCustomBtn.addEventListener('click', () => {
+            // Check if any items are selected first
+            const selectedItems = getSelectedMenuItems();
+            const totalSelected = Object.values(selectedItems).reduce((sum, items) => sum + items.length, 0);
+            
+            if (totalSelected === 0) {
+                alert('Please select at least one menu item to generate a custom PDF.');
+                return;
+            }
+            
+            // Show modal
+            customerModal.classList.remove('hidden');
+            // Reset form
+            customerForm.reset();
+            // Hide error messages
+            document.getElementById('name-error')?.classList.add('hidden');
+            document.getElementById('contact-error')?.classList.add('hidden');
+            document.getElementById('plates-error')?.classList.add('hidden');
+        });
+    }
+    
+    // Close modal handlers
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            customerModal?.classList.add('hidden');
+        });
+    }
+    
+    if (cancelFormBtn) {
+        cancelFormBtn.addEventListener('click', () => {
+            customerModal?.classList.add('hidden');
+        });
+    }
+    
+    // Close modal when clicking outside
+    if (customerModal) {
+        customerModal.addEventListener('click', (e) => {
+            if (e.target === customerModal) {
+                customerModal.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Form submission handler
+    if (customerForm) {
+        customerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('customer-name').value.trim();
+            const address = document.getElementById('customer-address').value.trim();
+            const contact = document.getElementById('customer-contact').value.trim();
+            const totalPlates = document.getElementById('total-plates').value.trim();
+            
+            // Validation
+            let isValid = true;
+            const nameError = document.getElementById('name-error');
+            const contactError = document.getElementById('contact-error');
+            const platesError = document.getElementById('plates-error');
+            
+            if (!name) {
+                nameError?.classList.remove('hidden');
+                isValid = false;
+            } else {
+                nameError?.classList.add('hidden');
+            }
+            
+            if (!contact) {
+                contactError?.classList.remove('hidden');
+                isValid = false;
+            } else {
+                contactError?.classList.add('hidden');
+            }
+            
+            if (!totalPlates || parseInt(totalPlates) < 1) {
+                platesError?.classList.remove('hidden');
+                isValid = false;
+            } else {
+                platesError?.classList.add('hidden');
+            }
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Store customer info for PDF generation
+            window._customerInfo = {
+                name: name,
+                address: address,
+                contact: contact,
+                totalPlates: parseInt(totalPlates)
+            };
+            
+            // Close modal
+            customerModal.classList.add('hidden');
+            
+            // Disable submit button and show loading
+            const submitBtn = document.getElementById('submit-form-btn');
+            const originalSubmitText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
             
             try {
                 await generateCustomMenuPDF();
+                // Clear customer info after successful generation
+                window._customerInfo = null;
             } catch (error) {
                 console.error('Error generating custom PDF:', error);
                 alert('Error generating PDF. Please try again.');
             } finally {
-                generateCustomBtn.disabled = false;
-                generateCustomBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalSubmitText;
             }
         });
     }
