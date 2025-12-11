@@ -453,6 +453,45 @@ a[href="/pages/custom-menu.html"] {
     font-weight: 600;
 }
 
+/* Customer Information Modal Styles */
+#customer-info-modal {
+    backdrop-filter: blur(4px);
+}
+
+#customer-info-modal .bg-white {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#customer-info-form input:invalid,
+#customer-info-form textarea:invalid {
+    border-color: #ef4444;
+}
+
+#customer-info-form input:valid,
+#customer-info-form textarea:valid {
+    border-color: #10b981;
+}
+
+/* Quantity Input Styles */
+.menu-item-quantity-container {
+    pointer-events: auto;
+}
+
+.menu-item-quantity {
+    pointer-events: auto;
+}
+
 /* Menu Tab Styles */
 .menu-tabs {
     display: flex;
