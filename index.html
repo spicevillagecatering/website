@@ -68,6 +68,9 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- jsPDF Library (load early for PDF generation) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -568,9 +571,21 @@
         <i class="fab fa-whatsapp text-3xl"></i>
     </a>
 
+    <!-- Custom Menu Button (Above Chatbot) -->
+    <a href="/pages/custom-menu.html" 
+       class="fixed bottom-32 right-6 z-50 bg-secondary text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:bg-yellow-600 transition-all duration-300 transform hover:scale-110 group"
+       aria-label="Customize Your Menu"
+       title="Choose Your Custom Menu"
+       style="margin-bottom: 80px;">
+        <i class="fas fa-utensils text-2xl"></i>
+        <span class="absolute right-full mr-3 bg-secondary text-white px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Customize Menu
+        </span>
+    </a>
+
     <!-- AI Chatbot Button (Placeholder for future implementation) -->
-    <div id="chatbot-container">
-        <button id="chatbot-toggle" class="bg-primary text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:bg-red-800 transition-all duration-300 transform hover:scale-110 mb-4">
+    <div id="chatbot-container" style="bottom: 100px; right: 24px;">
+        <button id="chatbot-toggle" class="bg-primary text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:bg-red-800 transition-all duration-300 transform hover:scale-110">
             <i class="fas fa-robot text-2xl"></i>
         </button>
         <div id="chatbot-window" class="bg-white rounded-lg shadow-2xl">
@@ -742,13 +757,16 @@
                     </p>
                     
                     <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 mb-6 md:mb-8">
-                        <a href="#menu" class="inline-block bg-primary text-white px-6 py-3 md:px-8 md:py-4 rounded-lg font-bold text-base md:text-lg hover:bg-red-700 transition duration-300 shadow-lg transform hover:-translate-y-1 text-center">
+                    <div class="flex flex-col sm:flex-row gap-2 mb-6 md:mb-8 items-center justify-center sm:justify-start">
+                        <a href="#menu" class="inline-block bg-primary text-white px-4 py-2 rounded-lg font-semibold text-xs hover:bg-red-700 transition duration-300 shadow-md transform hover:-translate-y-0.5 text-center">
                             EXPLORE MENU →
                         </a>
-                        <button id="download-menu-btn" class="inline-block bg-secondary text-white px-6 py-3 md:px-8 md:py-4 rounded-lg font-bold text-base md:text-lg hover:bg-yellow-600 transition duration-300 shadow-lg transform hover:-translate-y-1">
+                        <button id="download-menu-btn" type="button" class="inline-block bg-secondary text-white px-4 py-2 rounded-lg font-semibold text-xs hover:bg-yellow-600 transition duration-300 shadow-md transform hover:-translate-y-0.5 text-center whitespace-nowrap">
                             <i class="fas fa-download mr-2"></i> DOWNLOAD MENU
                         </button>
+                        <a href="/pages/custom-menu.html" class="inline-block bg-gradient-to-r from-secondary to-yellow-500 text-white px-4 py-2 rounded-lg font-semibold text-xs hover:from-yellow-500 hover:to-yellow-600 transition duration-300 shadow-md transform hover:-translate-y-0.5 text-center whitespace-nowrap">
+                            <i class="fas fa-utensils mr-2"></i> CUSTOMIZE MENU
+                        </a>
                     </div>
                     
                     <!-- Contact Info -->
@@ -1064,8 +1082,45 @@
                 </div>
             </div>
 
+            <!-- Custom Menu Highlight Banner -->
+            <div class="max-w-6xl mx-auto mb-8 scroll-anim">
+                <div class="bg-gradient-to-r from-secondary to-yellow-500 rounded-xl p-4 md:p-6 shadow-xl border-4 border-yellow-300">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                        <div class="flex-1 text-center md:text-left">
+                            <h3 class="text-xl md:text-2xl font-heading font-bold text-white mb-1">
+                                <i class="fas fa-utensils mr-2"></i> Choose Your Custom Menu
+                            </h3>
+                            <p class="text-white text-sm md:text-base opacity-95">Select your favorite dishes and create a personalized menu PDF for your event</p>
+                        </div>
+                        <a href="/pages/custom-menu.html" 
+                           class="px-5 py-2.5 bg-white text-secondary rounded-lg font-bold text-sm hover:bg-gray-100 transition duration-300 shadow-lg transform hover:scale-105 whitespace-nowrap">
+                            <i class="fas fa-edit mr-2"></i> Customize Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Menu Tabs -->
             <div class="max-w-6xl mx-auto">
+                <!-- Customize Menu Controls -->
+                <div class="mb-6 flex flex-col sm:flex-row gap-4 items-center justify-center">
+                    <button id="toggle-customize-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition duration-300">
+                        <i class="fas fa-edit mr-2"></i> Customize Menu
+                    </button>
+                    <div id="customize-controls" class="hidden flex flex-wrap gap-2 items-center">
+                        <button id="select-all-btn" class="px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-red-700 transition duration-300 text-sm">
+                            <i class="fas fa-check-square mr-2"></i> Select All
+                        </button>
+                        <button id="deselect-all-btn" class="px-4 py-2 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600 transition duration-300 text-sm">
+                            <i class="fas fa-square mr-2"></i> Deselect All
+                        </button>
+                        <button id="generate-custom-pdf-btn" class="px-4 py-2 bg-secondary text-white rounded-lg font-semibold hover:bg-yellow-600 transition duration-300 text-sm">
+                            <i class="fas fa-file-pdf mr-2"></i> Generate Custom PDF
+                        </button>
+                        <span id="selected-count" class="text-sm text-gray-600 font-semibold">0 items selected</span>
+                    </div>
+                </div>
+                
                 <div class="menu-tabs scroll-anim">
                     <button class="menu-tab active" data-tab="starters">Starters</button>
                     <button class="menu-tab" data-tab="salads">Salads</button>
@@ -2266,6 +2321,7 @@
         </div>
     </section>
 
+    <script src="./src/js/menu-items-data.js"></script>
     <script src="./src/js/menu-data.js"></script>
     <script src="./src/js/script.js"></script>
     <script src="./src/js/pdf-download.js"></script>
@@ -2277,10 +2333,40 @@
                 navigator.serviceWorker.register('/sw.js')
                     .then((registration) => {
                         console.log('Service Worker registered successfully:', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New service worker available, reload page
+                                    if (confirm('New version available! Reload to update?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                        
+                        // Listen for messages from service worker
+                        navigator.serviceWorker.addEventListener('message', (event) => {
+                            if (event.data && event.data.type === 'SW_UPDATED') {
+                                if (confirm('Website updated! Reload to see changes?')) {
+                                    window.location.reload();
+                                }
+                            }
+                        });
                     })
                     .catch((error) => {
                         console.log('Service Worker registration failed:', error);
                     });
+            });
+            
+            // Force reload on Ctrl+F5 or Cmd+Shift+R
+            window.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'R') {
+                    e.preventDefault();
+                    window.location.reload(true);
+                }
             });
         }
     </script>
