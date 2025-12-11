@@ -4,14 +4,26 @@
 User-agent: *
 Allow: /
 
-# Allow all search engines to crawl the site
-Allow: /index.html
+# Allow all pages
+Allow: /about
+Allow: /menu
+Allow: /services
+Allow: /blog
+Allow: /gallery
+Allow: /kitchen
+Allow: /contact
+
+# Allow static assets
 Allow: /assets/
+Allow: /styles/
 Allow: /src/
+Allow: /pages/
+Allow: /components/
 
 # Disallow admin or private areas (if any)
 # Disallow: /admin/
 # Disallow: /private/
+# Disallow: /api/ (if you want to hide API endpoints)
 
 # Sitemap location
 Sitemap: https://www.spicevillagecatering.ie/sitemap.xml
@@ -22,6 +34,7 @@ Sitemap: https://www.spicevillagecatering.ie/sitemap.xml
 # Specific rules for major search engines
 User-agent: Googlebot
 Allow: /
+Allow: /assets/images/
 
 User-agent: Googlebot-Image
 Allow: /assets/images/
@@ -38,4 +51,3 @@ Crawl-delay: 10
 
 User-agent: SemrushBot
 Crawl-delay: 10
-
