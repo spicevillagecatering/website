@@ -4,6 +4,17 @@
 const fs = require('fs');
 const path = require('path');
 
+// Load structured data helper
+let structuredData;
+try {
+    structuredData = require('./structured-data');
+} catch (error) {
+    console.warn('Structured data module not found, using fallback');
+    structuredData = {
+        generateAllSchemas: () => '<!-- Structured data not available -->'
+    };
+}
+
 function loadComponent(componentName) {
     const componentPath = path.join(__dirname, '..', 'components', `${componentName}.html`);
     try {
@@ -14,7 +25,7 @@ function loadComponent(componentName) {
     }
 }
 
-function loadPageTemplate(pageContent, pageTitle, pageDescription) {
+function loadPageTemplate(pageContent, pageTitle, pageDescription, pageUrl = 'https://www.spicevillagecatering.ie/') {
     const topbar = loadComponent('topbar');
     const header = loadComponent('header');
     const footer = loadComponent('footer');
@@ -104,6 +115,9 @@ function loadPageTemplate(pageContent, pageTitle, pageDescription) {
     <script src="/src/js/menu-data.js"></script>
     <script src="/src/js/script.js"></script>
     <script src="/src/js/chatbot.js"></script>
+    
+    <!-- Structured Data (JSON-LD) for SEO -->
+    ${structuredData.generateAllSchemas(pageTitle, pageDescription, pageUrl)}
 </body>
 </html>`;
 }

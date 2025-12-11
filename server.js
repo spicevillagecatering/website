@@ -14,6 +14,20 @@ app.use('/src', express.static(path.join(__dirname, 'src')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/pages', express.static(path.join(__dirname, 'pages')));
 
+// Serve sitemap.xml and robots.txt
+app.get('/sitemap.xml', (req, res) => {
+    res.sendFile(path.join(__dirname, 'sitemap.xml'));
+});
+
+app.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, 'robots.txt'));
+});
+
+// Serve Google verification file
+app.get('/google435f99607ac9af76.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'google435f99607ac9af76.html'));
+});
+
 // Helper function to load page content
 function loadPageContent(pageName) {
     const pagePath = path.join(__dirname, 'pages', `${pageName}.html`);
@@ -31,7 +45,8 @@ app.get('/', (req, res) => {
     const html = loadPageTemplate(
         pageContent,
         'Spice Village Catering | South Indian Catering Services | Wedding & Corporate Catering Dublin Ireland',
-        'Spice Village Catering - Ireland\'s premier South Indian catering service. Authentic Kerala cuisine, wedding catering, corporate events, buffet services in Dublin. 15+ years experience.'
+        'Spice Village Catering - Ireland\'s premier South Indian catering service. Authentic Kerala cuisine, wedding catering, corporate events, buffet services in Dublin. 15+ years experience.',
+        'https://www.spicevillagecatering.ie/'
     );
     res.send(html);
 });
@@ -59,10 +74,12 @@ pages.forEach(page => {
             kitchen: 'Take a behind-the-scenes look at our professional kitchen where authentic South Indian cuisine is prepared.',
             contact: 'Contact Spice Village Catering to book your event. We serve Dublin, Cork, Galway and all across Ireland.'
         };
+        const pageUrl = `https://www.spicevillagecatering.ie/${page}`;
         const html = loadPageTemplate(
             pageContent,
             titles[page] || 'Spice Village Catering',
-            descriptions[page] || 'Spice Village Catering - Authentic South Indian catering in Ireland'
+            descriptions[page] || 'Spice Village Catering - Authentic South Indian catering in Ireland',
+            pageUrl
         );
         res.send(html);
     });
@@ -77,9 +94,37 @@ app.get('/index.html', (req, res) => {
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
 
+// 404 Error Handler - Must be last route
+// This catches all routes that don't match any defined routes above
+app.use((req, res, next) => {
+    // Don't handle 404 for static files or API routes
+    // Express static middleware will handle these, but we check to be safe
+    if (req.path.startsWith('/assets/') || 
+        req.path.startsWith('/src/') || 
+        req.path.startsWith('/styles/') ||
+        req.path.startsWith('/api/') ||
+        req.path.startsWith('/pages/') ||
+        req.path === '/sitemap.xml' ||
+        req.path === '/robots.txt' ||
+        req.path === '/google435f99607ac9af76.html' ||
+        req.path.includes('.')) { // Files with extensions (images, CSS, JS, etc.)
+        return next(); // Let Express handle it or return 404 naturally
+    }
+    
+    const pageContent = loadPageContent('404');
+    const html = loadPageTemplate(
+        pageContent,
+        '404 - Page Not Found | Spice Village Catering',
+        'The page you are looking for could not be found. Return to Spice Village Catering homepage.',
+        `https://www.spicevillagecatering.ie${req.originalUrl}`
+    );
+    res.status(404).send(html);
+});
+
 // Start server
 app.listen(PORT, () => {
     console.log(`🚀 Spice Village Catering server running on http://localhost:${PORT}`);
     console.log(`📝 Pages available: /, /about, /menu, /services, /blog, /gallery, /kitchen, /contact`);
+    console.log(`❌ 404 page configured for invalid routes`);
 });
 

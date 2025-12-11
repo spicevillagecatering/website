@@ -7,98 +7,67 @@
     <!-- Homepage -->
     <url>
         <loc>https://www.spicevillagecatering.ie/</loc>
-        <lastmod>2025-01-27</lastmod>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     
-    <!-- Home Section -->
+    <!-- About Page -->
     <url>
-        <loc>https://www.spicevillagecatering.ie/#home</loc>
-        <lastmod>2025-01-27</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>1.0</priority>
-    </url>
-    
-    <!-- About Section -->
-    <url>
-        <loc>https://www.spicevillagecatering.ie/#about</loc>
-        <lastmod>2025-01-27</lastmod>
+        <loc>https://www.spicevillagecatering.ie/about</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
     
-    <!-- Why Choose Us Section -->
+    <!-- Menu Page -->
     <url>
-        <loc>https://www.spicevillagecatering.ie/#why-choose-us</loc>
-        <lastmod>2025-01-27</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <!-- Menu Section -->
-    <url>
-        <loc>https://www.spicevillagecatering.ie/#menu</loc>
-        <lastmod>2025-01-27</lastmod>
+        <loc>https://www.spicevillagecatering.ie/menu</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     
-    <!-- Services Section -->
+    <!-- Services Page -->
     <url>
-        <loc>https://www.spicevillagecatering.ie/#services</loc>
-        <lastmod>2025-01-27</lastmod>
+        <loc>https://www.spicevillagecatering.ie/services</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
     
-    <!-- Blog Section -->
+    <!-- Blog Page -->
     <url>
-        <loc>https://www.spicevillagecatering.ie/#blog</loc>
-        <lastmod>2025-01-27</lastmod>
+        <loc>https://www.spicevillagecatering.ie/blog</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
-    <!-- Kitchen Section -->
+    <!-- Gallery Page -->
     <url>
-        <loc>https://www.spicevillagecatering.ie/#kitchen</loc>
-        <lastmod>2025-01-27</lastmod>
+        <loc>https://www.spicevillagecatering.ie/gallery</loc>
+        <lastmod>2025-12-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Kitchen Page -->
+    <url>
+        <loc>https://www.spicevillagecatering.ie/kitchen</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     
-    <!-- Gallery Section -->
+    <!-- Contact Page -->
     <url>
-        <loc>https://www.spicevillagecatering.ie/#gallery</loc>
-        <lastmod>2025-01-27</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <!-- Testimonials Section -->
-    <url>
-        <loc>https://www.spicevillagecatering.ie/#testimonials</loc>
-        <lastmod>2025-01-27</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    
-    <!-- AI Order System Section -->
-    <url>
-        <loc>https://www.spicevillagecatering.ie/#ai-order-system</loc>
-        <lastmod>2025-01-27</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-    
-    <!-- Contact Section -->
-    <url>
-        <loc>https://www.spicevillagecatering.ie/#contact</loc>
-        <lastmod>2025-01-27</lastmod>
+        <loc>https://www.spicevillagecatering.ie/contact</loc>
+        <lastmod>2025-12-11</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
+    
+    <!-- Note: 404 page is not included in sitemap as it's an error page -->
     
 </urlset>
-

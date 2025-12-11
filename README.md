@@ -135,6 +135,13 @@ The website uses a modular structure:
    });
    ```
 
+### Error Handling
+
+- **404 Page**: Custom 404 error page at `pages/404.html`
+- Automatically displayed for any invalid routes
+- Includes navigation links and contact information
+- Styled with Spice Village branding
+
 ## 🌐 Deployment
 
 ### Deploy to DigitalOcean
@@ -410,21 +417,66 @@ router.post('/chatbot/message', async (req, res) => {
 
 ### SEO Features
 
-- Meta tags for search engines
-- Open Graph tags for social media
-- Structured data (JSON-LD)
-- Sitemap support
-- Google Search Console verification
+- **Meta Tags**: Unique title and description for each page
+- **Open Graph Tags**: Social media sharing optimization
+- **Twitter Cards**: Enhanced Twitter sharing
+- **Structured Data (JSON-LD)**: 
+  - Organization schema (FoodEstablishment)
+  - LocalBusiness schema
+  - BreadcrumbList schema
+  - FAQPage schema
+  - WebPage schema
+- **Sitemap.xml**: Updated with all pages (`/sitemap.xml`)
+- **Robots.txt**: Properly configured for search engines (`/robots.txt`)
+- **Google Search Console**: Verification file included
+- **Canonical URLs**: Prevent duplicate content issues
+- **Geo Tags**: Location information for local SEO
 
 ## 📝 License
 
 MIT License - Feel free to use and modify as needed.
+
+## 🔍 SEO & Google Integration
+
+### Sitemap & Robots
+
+- **Sitemap**: Automatically includes all pages at `/sitemap.xml`
+- **Robots.txt**: Configured at `/robots.txt` to allow all search engines
+- **Google Verification**: File at `/google435f99607ac9af76.html`
+
+### Structured Data
+
+All pages automatically include structured data (JSON-LD) for:
+- Organization information
+- Local business details
+- Breadcrumbs
+- FAQ schema
+- Page-specific metadata
+
+### Google Search Console Setup
+
+1. **Submit Sitemap**:
+   - Go to Google Search Console
+   - Navigate to Sitemaps
+   - Submit: `https://www.spicevillagecatering.ie/sitemap.xml`
+
+2. **Verify Site**:
+   - Use the verification file: `google435f99607ac9af76.html`
+   - Or use the meta tag already in the HTML
+
+3. **Monitor**:
+   - Check indexing status
+   - Monitor search performance
+   - Review crawl errors
+
+See `SEO_CHECKLIST.md` for complete SEO setup guide.
 
 ## 🆘 Support
 
 For any issues or questions:
 - Check the code comments in individual files
 - Review the component structure in `components/` directory
+- See `SEO_CHECKLIST.md` for SEO setup
 - Contact: 085 818 9052 (WhatsApp)
 
 ---
