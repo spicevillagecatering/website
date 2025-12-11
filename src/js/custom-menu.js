@@ -244,6 +244,7 @@ function setupButtons() {
                 // Check if jsPDF is loaded
                 if (typeof window.jspdf === 'undefined') {
                     alert('PDF library is loading. Please wait a moment and try again.');
+                    window._customerInfo = null; // Clear on error
                     return;
                 }
                 
@@ -329,7 +330,7 @@ async function generateCustomMenuPDFLocal() {
         }
     }
     
-    // Direct implementation as fallback
+    // Direct implementation as fallback - include customer info
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -366,12 +367,125 @@ async function generateCustomMenuPDFLocal() {
     doc.line(margin, yPos, pageWidth - margin, yPos);
     yPos += 10;
 
+    // Add customer information if available
+    const customerInfo = window._customerInfo;
+    if (customerInfo) {
+        doc.setFontSize(12);
+        doc.setTextColor(60, 60, 60);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Customer Information', margin, yPos);
+        yPos += 8;
+        
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        
+        // Name
+        doc.setFont('helvetica', 'bold');
+        doc.text('Name:', margin, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(customerInfo.name, margin + 20, yPos);
+        yPos += 6;
+        
+        // Address (if provided)
+        if (customerInfo.address) {
+            doc.setFont('helvetica', 'bold');
+            doc.text('Address:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            const addressLines = doc.splitTextToSize(customerInfo.address, pageWidth - 2 * margin - 20);
+            doc.text(addressLines, margin + 20, yPos);
+            yPos += addressLines.length * 5 + 2;
+        }
+        
+        // Contact Number
+        doc.setFont('helvetica', 'bold');
+        doc.text('Contact:', margin, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(customerInfo.contact, margin + 20, yPos);
+        yPos += 6;
+        
+        // Email (if provided)
+        if (customerInfo.email) {
+            doc.setFont('helvetica', 'bold');
+            doc.text('Email:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(customerInfo.email, margin + 20, yPos);
+            yPos += 6;
+        }
+        
+        // Total Plates
+        doc.setFont('helvetica', 'bold');
+        doc.text('Total Plates:', margin, yPos);
+        doc.setFont('helvetica', 'normal');
+        doc.text(customerInfo.totalPlates.toString(), margin + 20, yPos);
+        yPos += 8;
+        
+        // Add separator after customer info
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.3);
+        doc.line(margin, yPos, pageWidth - margin, yPos);
+        yPos += 8;
+    }
+
     // Add custom menu title
     doc.setFontSize(18);
     doc.setTextColor(198, 40, 40);
     doc.setFont('helvetica', 'bold');
     doc.text('Custom Menu', margin, yPos);
     yPos += 8;
+    
+    // Add event details if provided
+    if (customerInfo) {
+        if (customerInfo.eventDate) {
+            const eventDate = new Date(customerInfo.eventDate);
+            const formattedDate = eventDate.toLocaleDateString('en-IE', { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Event Date:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(formattedDate, margin + 30, yPos);
+            yPos += 6;
+        }
+        if (customerInfo.eventTime) {
+            const timeValue = customerInfo.eventTime;
+            const [hours, minutes] = timeValue.split(':');
+            const hour24 = parseInt(hours);
+            const hour12 = hour24 > 12 ? hour24 - 12 : (hour24 === 0 ? 12 : hour24);
+            const ampm = hour24 >= 12 ? 'PM' : 'AM';
+            const formattedTime = `${hour12}:${minutes} ${ampm}`;
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Event Time:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(formattedTime, margin + 30, yPos);
+            yPos += 6;
+        }
+        if (customerInfo.eventVenue) {
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Venue:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            const venueLines = doc.splitTextToSize(customerInfo.eventVenue, pageWidth - 2 * margin - 30);
+            doc.text(venueLines, margin + 30, yPos);
+            yPos += venueLines.length * 5 + 2;
+        }
+        if (customerInfo.eventParticipants) {
+            doc.setFontSize(11);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Number of Participants:', margin, yPos);
+            doc.setFont('helvetica', 'normal');
+            doc.text(customerInfo.eventParticipants.toString(), margin + 50, yPos);
+            yPos += 6;
+        }
+    }
     
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
