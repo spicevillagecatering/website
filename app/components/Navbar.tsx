@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 
 const NAV_LINKS = [
-  { href: '#home',      label: 'Home'      },
-  { href: '#about',     label: 'About'     },
-  { href: '#services',  label: 'Services'  },
-  { href: '#menu',      label: 'Menu'      },
-  { href: '#gallery',   label: 'Gallery'   },
-  { href: '#locations', label: 'Locations' },
-  { href: '#contact',   label: 'Contact'   },
+  { href: '/#home',      label: 'Home'      },
+  { href: '/#about',     label: 'About'     },
+  { href: '/#services',  label: 'Services'  },
+  { href: '/#menu',      label: 'Menu'      },
+  { href: '/#gallery',   label: 'Gallery'   },
+  { href: '/#locations', label: 'Locations' },
+  { href: '/#contact',   label: 'Contact'   },
 ];
 
 export default function Navbar() {
@@ -76,7 +76,7 @@ export default function Navbar() {
         <div className={`max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between transition-all duration-300 ${scrolled ? 'py-2' : 'py-4'}`}>
 
           {/* ── Logo ── */}
-          <a href="#home" onClick={closeMenu} className="flex items-center gap-3 group">
+          <a href="/#home" onClick={closeMenu} className="flex items-center gap-3 group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo-white.png"
@@ -112,7 +112,7 @@ export default function Navbar() {
             </a>
 
             <a
-              href="#contact"
+              href="/#contact"
               className="hidden lg:inline-flex items-center bg-sv-orange hover:bg-red-700 text-white text-[15px] font-semibold px-6 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-red"
             >
               Book Catering
@@ -169,7 +169,7 @@ export default function Navbar() {
             ))}
             <div className="mt-5 space-y-3">
               <a
-                href="#contact"
+                href="/#contact"
                 onClick={closeMenu}
                 className="block text-center bg-sv-red hover:bg-red-800 text-white font-semibold py-3.5 rounded-full transition-colors text-[15px]"
               >

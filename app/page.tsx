@@ -14,10 +14,18 @@ import ScrollReveal from './components/ScrollReveal';
 import MouseFx from './components/MouseFx';
 import TouchFx from './components/TouchFx';
 import SiteBackground from './components/SiteBackground';
+import { FAQS } from './lib/site';
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
 
 export default function Home() {
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <SiteBackground />
       <Navbar />
       <Hero />

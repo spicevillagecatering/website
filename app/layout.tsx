@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { SITE, SITE_URL, BRANCHES, FAQS } from './lib/site';
+import { SITE, SITE_URL, BRANCHES } from './lib/site';
 import { Playfair_Display, Inter } from 'next/font/google';
 import './globals.css';
 
@@ -124,14 +124,6 @@ const jsonLd = {
           ...(b.postal ? { postalCode: b.postal } : {}),
           addressCountry: 'IE',
         },
-      })),
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: FAQS.map((f) => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a },
       })),
     },
   ],

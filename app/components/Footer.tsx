@@ -1,21 +1,17 @@
+import Link from 'next/link';
+import { byGroup } from '../lib/pages';
+
 const QUICK_LINKS = [
-  { href: '#home',      label: 'Home'      },
-  { href: '#about',     label: 'About Us'  },
-  { href: '#services',  label: 'Services'  },
-  { href: '#menu',      label: 'Our Menu'  },
-  { href: '#gallery',   label: 'Gallery'   },
-  { href: '#locations', label: 'Locations' },
-  { href: '#contact',   label: 'Contact'   },
+  { href: '/#home',      label: 'Home'      },
+  { href: '/#about',     label: 'About Us'  },
+  { href: '/#services',  label: 'Services'  },
+  { href: '/#menu',      label: 'Our Menu'  },
+  { href: '/#gallery',   label: 'Gallery'   },
+  { href: '/#locations', label: 'Locations' },
+  { href: '/#contact',   label: 'Contact'   },
 ];
 
-const SERVICES_LINKS = [
-  'Wedding Catering',
-  'Corporate Events',
-  'Birthday Parties',
-  'Family Gatherings',
-  'Outdoor Catering',
-  'Holy Communion',
-];
+const SERVICES_LINKS = [...byGroup('service'), ...byGroup('cuisine'), ...byGroup('area')];
 
 const BRANCHES = [
   {
@@ -180,17 +176,17 @@ export default function Footer() {
 
         {/* Col 3 — Services */}
         <div>
-          <h4 className="text-white font-bold text-[13px] uppercase tracking-widest mb-5">Our Services</h4>
+          <h4 className="text-white font-bold text-[13px] uppercase tracking-widest mb-5">Services &amp; Areas</h4>
           <ul className="space-y-2.5">
             {SERVICES_LINKS.map((s) => (
-              <li key={s}>
-                <a
-                  href="#services"
+              <li key={s.slug}>
+                <Link
+                  href={`/${s.slug}`}
                   className="text-gray-400 hover:text-sv-orange text-[13px] transition-colors flex items-center gap-2"
                 >
                   <span className="w-1 h-1 rounded-full bg-sv-orange shrink-0" />
-                  {s}
-                </a>
+                  {s.label}
+                </Link>
               </li>
             ))}
           </ul>
@@ -224,7 +220,7 @@ export default function Footer() {
             <span className="text-gray-600">·</span>
             <a href="#" className="text-gray-500 hover:text-gray-300 text-[12px] transition-colors">Terms of Service</a>
             <span className="text-gray-600">·</span>
-            <a href="#contact" className="text-gray-500 hover:text-gray-300 text-[12px] transition-colors">Sitemap</a>
+            <a href="/#contact" className="text-gray-500 hover:text-gray-300 text-[12px] transition-colors">Sitemap</a>
           </div>
         </div>
       </div>
