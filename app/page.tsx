@@ -6,11 +6,13 @@ import Menu       from './components/Menu';
 import Gallery    from './components/Gallery';
 import Reviews    from './components/Reviews';
 import Locations  from './components/Locations';
+import FAQ        from './components/FAQ';
 import Contact    from './components/Contact';
 import Footer     from './components/Footer';
 import WhatsApp   from './components/WhatsApp';
 import ScrollReveal from './components/ScrollReveal';
 import MouseFx from './components/MouseFx';
+import TouchFx from './components/TouchFx';
 import SiteBackground from './components/SiteBackground';
 
 export default function Home() {
@@ -25,11 +27,13 @@ export default function Home() {
       <Gallery />
       <Reviews />
       <Locations />
+      <FAQ />
       <Contact />
       <Footer />
       <WhatsApp />
       <ScrollReveal />
       <MouseFx />
+      <TouchFx />
     </main>
   );
 }

@@ -120,7 +120,7 @@ export default function Hero() {
         <div className="mt-12 inline-flex flex-wrap justify-center gap-x-8 gap-y-3 px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/15">
           {[
             { icon: '★', value: '5-Star Rated',   color: 'text-sv-orange' },
-            { icon: '✓', value: '1000+ Events',   color: 'text-white'  },
+            { icon: '✓', value: '5000+ Events',   color: 'text-white'  },
             { icon: '📍', value: '4 Locations',    color: 'text-sv-orange' },
             { icon: '🍽', value: 'Authentic Menu', color: 'text-white'  },
           ].map((t) => (

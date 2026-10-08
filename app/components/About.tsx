@@ -38,8 +38,8 @@ const FEATURES = [
 ];
 
 const STATS = [
-  { number: '6+',   label: 'Years of Service'  },
-  { number: '1K+',  label: 'Events Catered'    },
+  { number: '16+',  label: 'Years of Service'  },
+  { number: '5K+',  label: 'Events Catered'    },
   { number: '4',    label: 'Branch Locations'  },
   { number: '5★',   label: 'Customer Rating'   },
 ];
@@ -108,7 +108,7 @@ export default function About() {
 
             {/* Floating accent card */}
             <div className="absolute -bottom-5 -right-4 md:-bottom-6 md:-right-6 bg-sv-red text-white p-5 md:p-6 rounded-2xl shadow-xl text-center z-10">
-              <p className="font-display text-3xl md:text-4xl font-bold leading-none">6+</p>
+              <p className="font-display text-3xl md:text-4xl font-bold leading-none">16+</p>
               <p className="text-[11px] font-medium mt-1.5 opacity-90 leading-snug uppercase tracking-wider">
                 Years of<br />Excellence
               </p>
@@ -136,7 +136,7 @@ export default function About() {
             <div className="w-14 h-1 bg-sv-orange rounded-full mb-6" />
 
             <p className="text-gray-600 text-[15px] md:text-base leading-relaxed mb-4">
-              Spice Village Catering was born from a deep passion for authentic South Indian cuisine and a heartfelt desire to bring genuine flavours to every celebration. For over six years, we have been proudly serving the communities of Dublin and beyond with warm hospitality and culinary excellence.
+              Spice Village Catering was born from a deep passion for authentic South Indian cuisine and a heartfelt desire to bring genuine flavours to every celebration. For over sixteen years, we have been proudly serving the communities of Dublin and beyond with warm hospitality and culinary excellence.
             </p>
             <p className="text-gray-600 text-[15px] leading-relaxed mb-8">
               Whether you are planning a grand wedding reception, an intimate family gathering, or a corporate dinner for hundreds, our team of expert chefs crafts every dish with premium ingredients and traditional techniques — creating memories that linger long after the last bite.
