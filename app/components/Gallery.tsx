@@ -154,7 +154,7 @@ export default function Gallery() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a
-              href="https://www.instagram.com/spicevillagecatering/"
+              href="https://www.instagram.com/spicevillage_catering/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 border border-sv-border hover:border-sv-orange text-gray-700 hover:text-sv-orange font-medium px-5 py-2.5 rounded-full transition-all text-[13px]"

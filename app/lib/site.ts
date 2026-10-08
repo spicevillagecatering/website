@@ -9,7 +9,7 @@ export const SITE = {
   phone: '+353858189052',
   social: [
     'https://www.facebook.com/spicevillagecatering',
-    'https://www.instagram.com/spicevillagecatering/',
+    'https://www.instagram.com/spicevillage_catering/',
   ],
 };
 
