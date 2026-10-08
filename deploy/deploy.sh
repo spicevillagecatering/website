@@ -2,7 +2,7 @@
 # Manual one-command deploy:  EC2_HOST=1.2.3.4 EC2_USER=ubuntu EC2_KEY=~/key.pem ./deploy/deploy.sh
 set -euo pipefail
 : "${EC2_HOST:?set EC2_HOST}" "${EC2_USER:=ubuntu}" "${EC2_KEY:?set EC2_KEY}"
-APP_DIR="${APP_DIR:-/var/www/spicevillage}"
+APP_DIR="${APP_DIR:-/home/ubuntu/spicevillage}"
 SSH="ssh -i $EC2_KEY -o StrictHostKeyChecking=accept-new"
 
 npm ci
