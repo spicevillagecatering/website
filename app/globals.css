@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────
+   Base
+────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ──────────────────────────────────────────────
+   Scrollbar
+────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f5f0e8; }
+::-webkit-scrollbar-thumb { background: #B22222; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #8B0000; }
+
+/* ──────────────────────────────────────────────
+   Image placeholders
+   Replace any .img-ph div with a real <Image /> component
+   once you have the actual photos.
+────────────────────────────────────────────── */
+.img-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.img-ph span {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+  line-height: 1.6;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ──────────────────────────────────────────────
+   Gallery hover zoom
+────────────────────────────────────────────── */
+.gallery-cell {
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.gallery-cell .img-ph,
+.gallery-cell img {
+  transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.gallery-cell:hover .img-ph,
+.gallery-cell:hover img {
+  transform: scale(1.06);
+}
+
+/* ──────────────────────────────────────────────
+   Service card hover
+────────────────────────────────────────────── */
+.service-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+/* ──────────────────────────────────────────────
+   Decorative underline helper
+────────────────────────────────────────────── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #B22222;
+  margin-bottom: 0.75rem;
+  padding: 6px 16px;
+  background: rgba(178, 34, 34, 0.06);
+  border-radius: 999px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: #E11D2E;
+  border-radius: 50%;
+}
+
+/* ──────────────────────────────────────────────
+   Mobile nav open — prevent body scroll
+────────────────────────────────────────────── */
+body.nav-open {
+  overflow: hidden;
+}
+
+/* ──────────────────────────────────────────────
+   Modern refinements
+────────────────────────────────────────────── */
+::selection { background: rgba(245, 124, 0, 0.25); }
+
+section h2 { letter-spacing: -0.015em; }
+
+section { scroll-margin-top: 64px; }
+
+/* Softer, rounder cards site-wide */
+.service-card {
+  border-radius: 20px;
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.06);
+}
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 60px rgba(178, 34, 34, 0.14);
+}
+.gallery-cell { border-radius: 18px; }
+
+/* Primary buttons: gentle lift instead of scale */
+a.bg-sv-red, button.bg-sv-red {
+  background-image: linear-gradient(135deg, #B22222 0%, #8B0000 100%);
+}
+a.bg-sv-red:hover, button.bg-sv-red:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(178, 34, 34, 0.35);
+}
+
+/* Subtle section separation */
+#about, #menu, #locations, #gallery {
+  background-image: radial-gradient(circle at 100% 0%, rgba(245,124,0,0.05), transparent 45%);
+}
+
+/* Form fields */
+input, textarea, select {
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #B22222;
+  box-shadow: 0 0 0 4px rgba(178, 34, 34, 0.1);
+}
+
+/* Scroll reveal — transform/opacity only (GPU friendly) */
+.reveal {
+  opacity: 0;
+  transition: opacity .9s cubic-bezier(.22,.61,.36,1), transform .9s cubic-bezier(.22,.61,.36,1), filter .9s ease;
+  will-change: transform, opacity;
+}
+.reveal[data-reveal="up"]    { transform: translate3d(0, 44px, 0); }
+.reveal[data-reveal="left"]  { transform: translate3d(-80px, 0, 0); }
+.reveal[data-reveal="right"] { transform: translate3d(80px, 0, 0); }
+.reveal[data-reveal="zoom"]  { transform: scale(.88) translate3d(0, 24px, 0); filter: blur(4px); }
+.reveal.reveal-in {
+  opacity: 1;
+  transform: none !important;
+  filter: none;
+}
+
+/* Image zoom-out settle inside revealed wrappers */
+.reveal img { transition: transform 1.4s cubic-bezier(.22,.61,.36,1); transform: scale(1.12); }
+.reveal.reveal-in img { transform: scale(1); }
+
+/* Scroll progress bar */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60;
+  background: linear-gradient(90deg, #B22222, #E11D2E);
+  transform: scaleX(0); transform-origin: 0 50%;
+  pointer-events: none; will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none !important; filter: none; transition: none; }
+  .reveal img { transform: none; transition: none; }
+  #scroll-progress { display: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* Slow drifting background blobs */
+@keyframes bg-float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(60px, -50px, 0) scale(1.12); }
+}
+.bg-float { animation: bg-float 22s ease-in-out infinite; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .bg-float { animation: none; } }
