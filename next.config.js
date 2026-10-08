@@ -10,6 +10,10 @@ const nextConfig = {
       { source: '/kitchen',  destination: '/#gallery',   permanent: true },
       { source: '/contact',  destination: '/#contact',   permanent: true },
       { source: '/custom-menu', destination: '/#menu', permanent: true },
+      { source: '/onam-sadhya', destination: '/onam-sadhya-dublin', permanent: true },
+      { source: '/onam-sadya', destination: '/onam-sadhya-dublin', permanent: true },
+      { source: '/christmas-catering', destination: '/christmas-catering-dublin', permanent: true },
+      { source: '/christmas', destination: '/christmas-catering-dublin', permanent: true },
       { source: '/blog',     destination: '/',           permanent: true },
       { source: '/index.html', destination: '/',         permanent: true },
     ];

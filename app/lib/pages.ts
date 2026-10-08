@@ -167,12 +167,12 @@ export const PAGES: LandingPage[] = [
     slug: 'south-indian-catering-ireland',
     group: 'cuisine',
     label: 'South Indian Catering Ireland',
-    title: 'South Indian Catering Ireland',
+    title: 'South Indian & Indian Catering Ireland — Dublin, Near Me',
     description:
-      'Authentic South Indian and Kerala catering across Ireland. Appam, idiyappam, parotta, biryani, curries and payasam for weddings, parties and events from Dublin-based Spice Village Catering.',
-    h1: 'Authentic South Indian Catering Across Ireland',
+      'Indian food catering in Dublin and across Ireland — authentic South Indian and Kerala catering, near you. Appam, idiyappam, parotta, biryani, curries and payasam for weddings, parties and events from Dublin-based Spice Village Catering.',
+    h1: 'Indian Catering in Dublin & Across Ireland',
     intro:
-      'Spice Village Catering has served South Indian food in Ireland for over 16 years and more than 5,000 events. Our kitchens in Dublin and Kildare cook the flavours of Kerala and South India fresh for your celebration.',
+      'Searching for Indian catering near you? Spice Village Catering has served South Indian food in Ireland for over 16 years and more than 5,000 events. Our kitchens in Dublin and Kildare cook the flavours of Kerala and South India fresh for your celebration.',
     image: '/images/about-food.jpg',
     sections: [
       {
@@ -190,35 +190,99 @@ export const PAGES: LandingPage[] = [
     ],
     highlights: ['16+ years of catering', '5,000+ events', 'Kerala and South Indian specialities', 'Four branches'],
     faqs: [
+      { q: 'Is there an Indian caterer near me in Dublin?', a: 'Yes. Spice Village Catering has branches in Clondalkin, Lucan, Rialto (Dublin 8) and Naas (Co. Kildare), serving Indian food catering across Dublin. Call 085 818 9052.' },
       { q: 'Do you cater outside Dublin?', a: 'Yes, we regularly cater across Dublin and Co. Kildare and can discuss events in other counties. Contact us with the venue and date.' },
       { q: 'What South Indian dishes can I order?', a: 'Starters, appam, parotta, idiyappam, biryani, meat, fish and vegetarian curries, salads and desserts. See the Menu section for the full list.' },
     ],
   },
   {
-    slug: 'kerala-sadya-catering-dublin',
+    slug: 'onam-sadhya-dublin',
     group: 'cuisine',
-    label: 'Kerala Sadya Catering',
-    title: 'Kerala Sadya Catering Dublin — Onam & Vishu',
+    label: 'Onam Sadhya Dublin',
+    title: 'Onam Sadhya Dublin, Ireland — Order Kerala Sadya',
     description:
-      'Traditional Kerala sadya catering in Dublin for Onam, Vishu and weddings — a full vegetarian feast on a banana leaf. Order from Spice Village Catering.',
-    h1: 'Kerala Sadya Catering in Dublin',
+      'Order Onam sadhya in Dublin and across Ireland — a traditional vegetarian Kerala sadya with payasam, for families, associations and community events. Spice Village Catering, Dublin.',
+    h1: 'Onam Sadhya in Dublin & Ireland',
     intro:
-      'Celebrate Onam, Vishu or any family occasion with a traditional vegetarian Kerala feast. Our sadya catering brings the taste of home to Dublin and across Ireland.',
+      'Looking for an Onam sadhya near you? Spice Village Catering prepares a traditional vegetarian Kerala sadhya (sadya) for families, Malayali associations and community events in Dublin and across Ireland.',
     image: '/images/gallery-3.jpg',
     sections: [
       {
-        h: 'Onam sadya for associations and families',
-        p: 'Many Malayali associations and families in Ireland choose us for their Onam celebrations. Tell us your numbers and we will plan a full sadya with the traditional dishes, payasam and accompaniments.',
+        h: 'Onam sadhya near you in Dublin',
+        p: 'Our kitchens in Clondalkin, Lucan, Rialto and Naas let us prepare sadhya for Dublin and Co. Kildare. Order for your family, your office or your whole association, and tell us your numbers so we can plan quantities.',
       },
       {
-        h: 'Weddings, housewarmings and festivals',
-        p: 'Sadya is also popular for weddings, housewarmings and festivals such as Vishu. We can serve it buffet-style or plan service to suit your venue.',
+        h: 'Onam sadhya Ireland — associations and community events',
+        p: 'Many Malayali associations and cultural groups in Ireland choose us for their Onam celebrations. We can plan a full sadhya with the traditional dishes, accompaniments and payasam, served buffet-style or to suit your venue.',
+      },
+      {
+        h: 'Also for Vishu, weddings and housewarmings',
+        p: 'The same traditional sadya is popular for Vishu, weddings, housewarmings and other family celebrations throughout the year. Ask us about custom menus.',
       },
     ],
-    highlights: ['Fully vegetarian sadya', 'Onam, Vishu and weddings', 'Association and community orders', 'Payasam included'],
+    highlights: ['Fully vegetarian sadhya', 'Onam, Vishu, weddings', 'Association and group orders', 'Payasam included'],
     faqs: [
-      { q: 'Do you serve Onam sadya in Dublin?', a: `Yes — we cater Onam sadya for associations, families and community events. Book early as Onam weekends fill quickly. ${BOOK}` },
-      { q: 'Is sadya vegetarian?', a: 'Yes, a traditional sadya is fully vegetarian.' },
+      { q: 'Where can I get Onam sadhya in Dublin?', a: `Spice Village Catering prepares Onam sadhya for Dublin and Co. Kildare from our branches in Clondalkin, Lucan, Rialto and Naas. ${BOOK}` },
+      { q: 'Do you provide Onam sadhya in Ireland outside Dublin?', a: 'We regularly cater across Dublin and Kildare and can discuss events in other counties. Contact us with the venue, date and numbers.' },
+      { q: 'Is sadhya vegetarian?', a: 'Yes, a traditional Kerala sadhya (sadya) is fully vegetarian.' },
+      { q: 'How early should I order Onam sadhya?', a: 'Onam weekends fill up quickly, so order as early as you can — ideally several weeks before. Orders from associations and large groups should be placed even earlier.' },
+    ],
+  },
+  {
+    slug: 'christmas-catering-dublin',
+    group: 'service',
+    label: 'Christmas Catering',
+    title: 'Christmas Catering Dublin — Indian Festive Menus',
+    description:
+      'Christmas catering in Dublin — Indian and South Indian festive menus for family dinners, office Christmas lunches and Christmas parties. Order early from Spice Village Catering.',
+    h1: 'Christmas Catering in Dublin',
+    intro:
+      'Skip the cooking this Christmas. Spice Village Catering prepares festive South Indian and Indian menus for family gatherings, office lunches and Christmas parties across Dublin and Kildare.',
+    image: '/images/service-04.jpg',
+    sections: [
+      {
+        h: 'Christmas catering for families and offices',
+        p: 'Order trays for the Christmas dinner table or feed the whole team: biryani, curries, Kerala-style starters, breads and desserts, in quantities planned around your guest list.',
+      },
+      {
+        h: 'Festive menus with a South Indian twist',
+        p: 'Bring something different to the festive table — celebration biryani, roasts and starters in South Indian style, vegetarian dishes and sweet endings. We build menus around your tastes and dietary needs.',
+      },
+      {
+        h: 'Order early',
+        p: 'December dates book up fast. Contact us as soon as you know your date and numbers so we can confirm availability and a menu.',
+      },
+    ],
+    highlights: ['Family and office Christmas orders', 'Veg and non-veg festive menus', 'Delivered across Dublin and Kildare', 'Custom menus'],
+    faqs: [
+      { q: 'Do you offer Christmas catering in Dublin?', a: `Yes. We cater Christmas family meals, office lunches and parties across Dublin and Kildare. ${BOOK}` },
+      { q: 'How early should I book Christmas catering?', a: 'December dates fill quickly, so book as early as possible — ideally in November.' },
+    ],
+  },
+  {
+    slug: 'christmas-party-catering-dublin',
+    group: 'service',
+    label: 'Christmas Party Catering',
+    title: 'Christmas Party Catering Dublin — Office & Family',
+    description:
+      'Christmas party catering in Dublin — Indian buffets for office parties, staff dinners, community and family Christmas parties. Fresh South Indian food from Spice Village Catering.',
+    h1: 'Christmas Party Catering in Dublin',
+    intro:
+      'From the office Christmas party to a big family get-together, we cater festive parties of every size in Dublin with fresh, generous Indian buffets.',
+    image: '/images/service-02.jpg',
+    sections: [
+      {
+        h: 'Office and staff Christmas parties',
+        p: 'Easy-to-serve buffets for staff parties and team lunches, delivered on time with clearly labelled vegetarian, vegan and allergy-aware dishes.',
+      },
+      {
+        h: 'Community and family Christmas parties',
+        p: 'Parish, club, school and family parties in halls and homes. Tell us your numbers and venue and we will recommend a menu and quantities.',
+      },
+    ],
+    highlights: ['Buffets for office and family parties', 'Clear dietary labelling', 'Delivered ready to serve', 'Book early for December'],
+    faqs: [
+      { q: 'Can you cater a Christmas party for my office in Dublin?', a: `Yes. We cater staff and office Christmas parties across Dublin. ${BOOK}` },
     ],
   },
   {

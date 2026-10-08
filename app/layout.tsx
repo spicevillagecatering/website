@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   description: SITE.description,
   applicationName: SITE.name,
   keywords: [
-    'South Indian catering Dublin', 'Indian catering Dublin', 'wedding catering Dublin', 'Kerala catering Ireland',
+    'South Indian catering Dublin', 'Onam sadhya Dublin', 'Onam sadhya near me', 'Onam sadhya Ireland', 'Christmas catering Dublin', 'Christmas party catering Dublin', 'Indian food catering Dublin', 'Indian catering near me', 'Indian catering Dublin', 'wedding catering Dublin', 'Kerala catering Ireland',
     'corporate catering Dublin', 'birthday party catering', 'Holy Communion catering', 'biryani catering Dublin',
     'Indian caterer Clondalkin', 'Indian caterer Lucan', 'Indian caterer Naas', 'Indian caterer Rialto', 'Spice Village', 'catering Ireland', 'Indian catering Ireland', 'South Indian food Dublin', 'caterer near me Dublin',
   ],

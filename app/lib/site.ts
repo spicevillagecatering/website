@@ -42,6 +42,18 @@ export const FAQS = [
     a: 'Call us on 085 818 9052, message us on WhatsApp, email info@spicevillagecatering.ie or use the booking form on this page, and we will get back to you.',
   },
   {
+    q: 'Where can I order Onam sadhya in Dublin?',
+    a: 'Spice Village Catering prepares traditional vegetarian Onam sadhya for families, associations and community events in Dublin, Co. Kildare and across Ireland. Order early — see our Onam sadhya page or call 085 818 9052.',
+  },
+  {
+    q: 'Do you offer Christmas catering and Christmas party catering?',
+    a: 'Yes. We cater Christmas family meals, office lunches and Christmas parties across Dublin and Kildare with Indian and South Indian festive menus. Book early for December.',
+  },
+  {
+    q: 'Is there an Indian caterer near me in Dublin?',
+    a: 'Spice Village Catering has branches in Clondalkin, Lucan, Rialto (Dublin 8) and Naas (Co. Kildare), covering Indian food catering across Dublin.',
+  },
+  {
     q: 'How long has Spice Village been catering?',
     a: 'Over 16 years, with more than 5,000 events catered for families, businesses and communities.',
   },
