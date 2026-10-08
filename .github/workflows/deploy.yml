@@ -2,7 +2,7 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [websitev4]
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
